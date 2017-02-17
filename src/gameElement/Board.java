@@ -8,13 +8,62 @@ public class Board {
 	//ATTENTION
 	//Ceci est un squelette incomplet contenant uniquement le profil de quelques méthodes, dans le but de compiler la classe GameUI sans erreurs
 	//Il manque les getters et les setters ainsi que les classes externes telles que Square, Eval, Game, Player,...
+	private Game game;
+	private int size;
+	private int numberOfPieces;
+	private Square[][] board;
 	
-	
-	
+	public Board(){
+		this.game = new Game();
+		this.size = 8;
+		this.numberOfPieces = 0;
+		this.board = new Square[this.size][this.size];
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				board[i][j] = game.getEmpty();
+			}
+		}
+	}
+
+
 	//---------------TP1------------------------
 	public Square getPiece(int i, int j) {
 		// TODO Auto-generated method stub
-		return null;
+		return board[i][j];
+	}
+	
+	public void setPiece(int i, int j, Square piece){
+		if(this.getPiece(i,j) instanceof Empty){
+			if(!(piece instanceof Empty))
+				this.numberOfPieces++;
+		}else{
+			if(piece instanceof Empty){
+				this.numberOfPieces--;
+			}
+		}
+		board[i][j] = piece;
+	}
+	
+	public void removePiece(int i, int j){
+		if(!(this.getPiece(i,j) instanceof Empty)){
+			board[i][j] = game.getEmpty();
+			this.numberOfPieces--;
+		}
+	}
+	
+	public boolean isEmpty(int i, int j){
+		return (this.getPiece(i,j) instanceof Empty);
+	}
+	
+	public String toString(){
+		String retour = "";
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				retour += this.getPiece(i,j).toString()+"    ";
+			}
+			retour += " \n";
+		}
+		return retour;
 	}
 
 	public boolean isAccessible(int i, int j) {
@@ -85,9 +134,36 @@ public class Board {
 	}
 	
 	
-	
+	/** -------------------------------------------GETTERS ET SETTERS------------------------------------------   */
+
+	public Game getGame() {
+		return game;
+	}
 
 
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+
+	public int getSize() {
+		return size;
+	}
+
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+
+	public int getNumberOfPieces() {
+		return numberOfPieces;
+	}
+
+
+	public void setNumberOfPieces(int numberOfPieces) {
+		this.numberOfPieces = numberOfPieces;
+	}
 
 
 

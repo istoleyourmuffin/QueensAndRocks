@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 
 
 import gameElement.Board;
-import gameElements.*;
+import gameElement.*;
 
 public class GameUI {
 	private Board b; //le plateau de jeu
@@ -345,7 +345,7 @@ public class GameUI {
 
 
 
-		@Override
+		
 		public void actionPerformed(ActionEvent arg0) {
 			Board b;
 			switch (players)
@@ -471,7 +471,7 @@ public class GameUI {
 			this.p=players;
 		}
 
-		@Override
+		
 		public void actionPerformed(ActionEvent arg0) {
 			g.setPlayers(p);
 			g.chooseVisibility();
@@ -491,7 +491,7 @@ public class GameUI {
 			this.a=a;
 		}
 
-		@Override
+		
 		public void actionPerformed(ActionEvent arg0) {
 			g.setShowingAccess(a);
 			g.finishFrame();
@@ -517,7 +517,7 @@ public class GameUI {
 			this.player=player;
 		}
 
-		@Override
+		
 		public void actionPerformed(ActionEvent arg0) {
 			boolean trying;
 			if(piece==2){

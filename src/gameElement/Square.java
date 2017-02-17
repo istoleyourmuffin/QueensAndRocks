@@ -1,5 +1,8 @@
 package gameElement;
 
-public class Square {
-	private Player player;
+public interface Square {
+	
+	public Player getPlayer();
+	
+	public void setPlayer(Player p);
 }
