@@ -5,9 +5,6 @@ import java.util.ArrayList;
 
 public class Board {
 	
-	//ATTENTION
-	//Ceci est un squelette incomplet contenant uniquement le profil de quelques méthodes, dans le but de compiler la classe GameUI sans erreurs
-	//Il manque les getters et les setters ainsi que les classes externes telles que Square, Eval, Game, Player,...
 	private Game game;
 	private int size;
 	private int numberOfPieces;
@@ -45,7 +42,7 @@ public class Board {
 	}
 	
 	public void removePiece(int i, int j){
-		if(!(this.getPiece(i,j) instanceof Empty)){
+		if(!(this.isEmpty(i,j))){
 			board[i][j] = game.getEmpty();
 			this.numberOfPieces--;
 		}
@@ -67,10 +64,41 @@ public class Board {
 	}
 
 	public boolean isAccessible(int i, int j) {
-		// TODO Auto-generated method stub
-		return false;
+		if(!(this.isEmpty(i,j)) || (i >= size) || (j >= size))
+			return false;
+		int x = 0;
+		int y = 0;
+		boolean queenFound = false;
+		while(!queenFound && (y < this.size)){
+			x = 0;
+			while(!queenFound && (x < this.size)){
+				if(!(x == i && y == j)) {
+					if(this.getPiece(x,y) instanceof Queen && ((x == i) || (y == j) || (Math.abs(x - i) == Math.abs(y - j))))
+						queenFound = true;
+				}
+				x++;
+			}
+			y++;
+		}
+		return !queenFound;
 	}
 
+	public String toStringAccess() {
+		String retour = this.toString();
+		retour += "\n------------------Cases inacessibles--------------------\n";
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				if(!isAccessible(i,j))
+					retour += "X";
+				else
+					retour += "-";
+				retour += "    ";
+			}
+			retour += " \n";
+		}
+		return retour;
+	}
+	
 	public int numberOfAccessible() {
 		// TODO Auto-generated method stub
 		return 0;

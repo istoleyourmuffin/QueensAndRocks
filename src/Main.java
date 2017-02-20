@@ -11,7 +11,7 @@ public class Main {
 		Game game = b.getGame();
 		b.setPiece(5, 2, game.getQueen0());
 		b.setPiece(1, 5 , game.getRock1());
-		String s2 = b.toString();
+		String s2 = b.toStringAccess();
 		System.out.println(s2);
 		
 		GameUI g = new GameUI(b,2);
