@@ -88,7 +88,7 @@ public class Board {
 		retour += "\n------------------Cases inacessibles--------------------\n";
 		for(int i = 0 ; i < this.size ; i++){
 			for(int j = 0 ; j < this.size ; j++){
-				if(!isAccessible(i,j))
+				if(!this.isAccessible(i,j))
 					retour += "X";
 				else
 					retour += "-";
@@ -100,13 +100,25 @@ public class Board {
 	}
 	
 	public int numberOfAccessible() {
-		// TODO Auto-generated method stub
-		return 0;
+		int nbOfAccessible = 0;
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				if(this.isAccessible(i,j))
+					nbOfAccessible++;
+			}
+		}
+		return nbOfAccessible;
 	}
 
 	public int numberOfQueens() {
-		// TODO Auto-generated method stub
-		return 0;
+		int nbOfQueens = 0;
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				if(this.getPiece(i,j) instanceof Queen)
+					nbOfQueens++;
+			}
+		}
+		return nbOfQueens;
 	}
 	
 	public boolean placeQueen(int i, int j) {
