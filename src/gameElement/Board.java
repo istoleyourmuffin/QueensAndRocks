@@ -85,7 +85,7 @@ public class Board {
 
 	public String toStringAccess() {
 		String retour = this.toString();
-		retour += "\n------------------Cases inacessibles--------------------\n";
+		retour += "\n---------Cases inacessibles---------\n";
 		for(int i = 0 ; i < this.size ; i++){
 			for(int j = 0 ; j < this.size ; j++){
 				if(!this.isAccessible(i,j))
@@ -114,7 +114,7 @@ public class Board {
 		int nbOfQueens = 0;
 		for(int i = 0 ; i < this.size ; i++){
 			for(int j = 0 ; j < this.size ; j++){
-				if(this.getPiece(i,j) instanceof Queen)
+				if(this.getPiece(i, j) instanceof Queen)
 					nbOfQueens++;
 			}
 		}
@@ -122,7 +122,10 @@ public class Board {
 	}
 	
 	public boolean placeQueen(int i, int j) {
-		// TODO Auto-generated method stub
+		if(this.isAccessible(i, j)){
+			this.setPiece(i, j, game.getQueen0());
+			return true;
+		}
 		return false;
 	}
 	
