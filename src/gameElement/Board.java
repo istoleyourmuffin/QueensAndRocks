@@ -290,27 +290,34 @@ public class Board {
 			return false;
 		}
 		boolean queenFound = false;
-		int x = 0;
+		int x;
 		int y = 0;
 		while(!queenFound && (y < array.length)){
 			x = 0;
 			while(!queenFound && (x < array.length)){
 				if(!(x == i && y == j)) {
-					if(array[y] >= 0 && ((x == i) || (y == j) || (Math.abs(x - i) == Math.abs(y - j))))
+					if(array[y] >= 0 && ((array[y] == i) || (y == j) || (Math.abs(array[y] - i) == Math.abs(y - j)))) {
 						queenFound = true;
+					}
 				}
 				x++;
 			}
 			y++;
 		}
-		
 		return !queenFound;
+	}
+	public static int numberOfQueensArray(int[] array) {
+		int nb = 0;
+		for(int i=0; i < array.length; i++)
+			if(array[i]>=0)
+				nb++;
+		return nb;
 	}
 	
 	public static ArrayList<int[]> getArraySuccessors(int[] array){
 		ArrayList<int[]> succList = new ArrayList<int[]>();
 		int[] succ;
-		for(int j = 0; j < array.length; j++){
+		int j = Board.numberOfQueensArray(array);
 			for(int i = 0; i < array.length; i++) {
 				if(Board.isAccessibleArray(i,j,array)){
 					succ = new int[array.length];
@@ -322,7 +329,6 @@ public class Board {
 					}
 					succList.add(succ);
 				}
-			}
 		}
 		return succList;
 	}
