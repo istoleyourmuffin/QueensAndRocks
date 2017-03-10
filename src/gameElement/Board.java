@@ -258,17 +258,127 @@ public class Board {
 	
 	public int[] boardToArray() {
 		int[] array = new int[this.getSize()];
-		int col = -1;
+		int lig = -1;
 		for (int j = 0; j < this.getSize(); j++){
 			for (int i = 0; i < this.getSize(); i++){
 				if(this.getPiece(i, j) instanceof Queen){
-					col = i;
+					lig = i;
 				}
 			}
-			array[j] = col;
-			col = -1;
+			array[j] = lig;
+			lig = -1;
 		}
 		return array;
+	}
+	
+	public static Board arrayToBoard(int[] array) {
+		Board b = new Board(array.length);
+		for(int j = 0 ; j < b.getSize() ; j++){
+			for(int i = 0 ; i < b.getSize() ; i++){
+				if(array[j] == i){
+					b.setPiece(i, j, b.getGame().getQueen0());
+					b.setNumberOfPieces(b.getNumberOfPieces()+1);
+				}else
+					b.setPiece(i, j, b.getGame().getEmpty());
+			}
+		}
+		return b;
+	}
+	
+	public static boolean isAccessibleArray(int i, int j, int[] array){
+		if (array[j] >= 0 || (i >= array.length) || (j >= array.length)){
+			return false;
+		}
+		boolean queenFound = false;
+		int x = 0;
+		int y = 0;
+		while(!queenFound && (y < array.length)){
+			x = 0;
+			while(!queenFound && (x < array.length)){
+				if(!(x == i && y == j)) {
+					if(array[y] >= 0 && ((x == i) || (y == j) || (Math.abs(x - i) == Math.abs(y - j))))
+						queenFound = true;
+				}
+				x++;
+			}
+			y++;
+		}
+		
+		return !queenFound;
+	}
+	
+	public static ArrayList<int[]> getArraySuccessors(int[] array){
+		ArrayList<int[]> succList = new ArrayList<int[]>();
+		int[] succ;
+		for(int j = 0; j < array.length; j++){
+			for(int i = 0; i < array.length; i++) {
+				if(Board.isAccessibleArray(i,j,array)){
+					succ = new int[array.length];
+					for(int k = 0; k < array.length; k++){
+						if (k == j)
+							succ[j] = i;
+						else
+							succ[k] = array[k];
+					}
+					succList.add(succ);
+				}
+			}
+		}
+		return succList;
+	}
+	
+	public static boolean isSolutionArray(int[] array){
+		boolean isSolution = true;
+		int index = 0;
+		while (isSolution && index < array.length){
+			if(array[index] < 0)
+				isSolution = false;
+			index++;
+		}
+		return isSolution;
+	}
+	
+	public static ArrayList<int[]> depthFirstSearchArray(){
+		int[] array = new int[8];
+		return Board.depthFirstSearchArray(array);
+	}
+	
+	public static ArrayList<int[]> depthFirstSearchArray(int[] initialState) {
+		ArrayList<int[]> solution = Board.depthFirstSearchArrayAlt(initialState);
+		if(solution == null)
+			throw new NoSuchElementException("Aucune solution trouvée");
+		return solution;
+	}
+	
+	public static ArrayList<int[]> depthFirstSearchArrayAlt(int[] currentState){
+		ArrayList<int[]> solution = null;
+		if(Board.isSolutionArray(currentState)){
+			solution = new ArrayList<int[]>();
+			solution.add(currentState);
+			return solution;
+		}
+		ArrayList<int[]> successors = Board.getArraySuccessors(currentState);
+		for(int[] succ: successors){
+			solution = Board.depthFirstSearchArrayAlt(succ);
+			if(solution != null){
+				solution.add(currentState);
+				return solution;
+			}
+		}
+		return solution;
+	}
+	
+	public static String solutionSteps(int[] array){
+		String s = "";
+		ArrayList<int[]> list = Board.depthFirstSearchArray(array);
+		Collections.reverse(list);
+		for(int[] succ : list){
+			s+="[ ";
+			for (int i = 0 ; i < succ.length ; i++)
+				s+=succ[i]+" ";
+			s+="]\n ----------------------- \n";
+		}
+		return s;
 	}
 	
 	

@@ -22,15 +22,19 @@ public class Main {
 		System.out.println(b.solutionSteps2(b));
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2 - t);
-		b.setPiece(5, 2, game.getQueen0());
+		/*b.setPiece(5, 2, game.getQueen0());
 		b.setPiece(2, 3, game.getQueen0());
 		int[] array = b.boardToArray();
-		System.out.print("[");
+		System.out.print("[ ");
 		for (int i = 0 ; i < array.length ; i++)
 			System.out.print(array[i]+" ");
-		System.out.println("]");
-		GameUI g = new GameUI(b,0);
-		g.launch();
+		System.out.println("]");*/
+		System.out.println("\n--------------------Test depthFirstSearchArray--------------------\n");
+		int[] array = b.boardToArray();
+		long t3 = System.currentTimeMillis();
+		System.out.println(Board.solutionSteps(array));
+		long t4 = System.currentTimeMillis();
+		System.out.println(t2 - t);
 	}
 	
 	public void testUI(){
