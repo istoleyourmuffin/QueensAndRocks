@@ -11,6 +11,8 @@ public class Board {
 	private int size;
 	private int numberOfPieces;
 	private Square[][] board;
+	private int rocksPlayer0;
+	private int rocksPlayer1;
 
 	public Board(){
 		this.game = new Game();
@@ -22,6 +24,8 @@ public class Board {
 				board[i][j] = game.getEmpty();
 			}
 		}
+		this.rocksPlayer0 = this.size;
+		this.rocksPlayer1 = this.size;
 	}
 	
 	public Board(int s){
@@ -46,6 +50,8 @@ public class Board {
 				board[i][j] = b.getPiece(i,j);
 			}
 		}
+		this.rocksPlayer0 = b.getRocksPlayer0();
+		this.rocksPlayer1 = b.getRocksPlayer1();
 	}
 
 	//---------------TP1------------------------
@@ -389,9 +395,44 @@ public class Board {
 	
 	
 	//------------TP3----------------------
+	
+	public int getRocksPlayer0() {
+		return this.rocksPlayer0;
+	}
+	
+	public int getRocksPlayer1() {
+		return this.rocksPlayer1;
+	}
+	
+	public void setRocksPlayer0(int rocks) {
+		this.rocksPlayer0 = rocks;
+	}
+	
+	public void setRocksPlayer1(int rocks) {
+		this.rocksPlayer1 = rocks;
+	}
+	
+	// Il manque la vérification des rochers
 	public boolean isAccessible2(int i, int j, Player currentPlayer) {
-		// TODO Auto-generated method stub
-		return false;
+		if(!(this.isEmpty(i,j)) || (i >= size) || (j >= size))
+			return false;
+		int x = 0;
+		int y = 0;
+		boolean queenFound = false;
+		while(!queenFound && (y < this.size)){
+			x = 0;
+			while(!queenFound && (x < this.size)){
+				if(!(x == i && y == j)) {
+					if(this.getPiece(x,y) instanceof Queen 
+							&& !this.getPiece(x, y).getPlayer().equals(currentPlayer) 
+							&& ((x == i) || (y == j) || (Math.abs(x - i) == Math.abs(y - j))))
+						queenFound = true;
+				}
+				x++;
+			}
+			y++;
+		}
+		return !queenFound;
 	}
 
 
@@ -406,10 +447,18 @@ public class Board {
 	}
 
 	public int getNumberOfRocksLeft(Player player){
-		// TODO Auto-generated method stub
-		return 0;  
+		if (player.getNumber() == 0)
+			return this.getRocksPlayer0();
+		return this.getRocksPlayer1();  
 	}
 
+	public void useRock(Player player){
+		if (player.getNumber() == 0)
+			this.setRocksPlayer0(this.getRocksPlayer0()-1);
+		else
+			this.setRocksPlayer1(this.getRocksPlayer1()-1);
+	}
+	
 	public int getScore(Player player){
 		// TODO Auto-generated method stub
 		return 0;
