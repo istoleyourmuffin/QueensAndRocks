@@ -8,7 +8,7 @@ import graphics.GameUI;
 public class Main {
 	
 	public void testFonctions(){
-		Board b = new Board(12);
+		Board b = new Board(8);
 		String s = b.toString();
 		//System.out.println(s);
 		//System.out.println("------------------------------------");
@@ -36,7 +36,7 @@ public class Main {
 	}
 	
 	public void testUI(){
-		Board b = new Board(18);
+		Board b = new Board(8);
 		GameUI g = new GameUI(b,2);
 		g.launch();
 	}
@@ -68,10 +68,23 @@ public class Main {
 		reader.close();
 	}
 	
+	public void testDuo() {
+		Board b = new Board();
+		b.setPiece(3, 4, b.getGame().getQueen0());
+		b.setPiece(2, 3, b.getGame().getRock1());
+		b.setPiece(4, 5, b.getGame().getRock0());
+		b.setPiece(4, 3, b.getGame().getRock1());
+		b.setPiece(2, 5, b.getGame().getRock0());
+		System.out.println(b.toStringAccess2(b.getGame().getPlayer1()));
+		
+		
+	}
+	
 	public static void main(String[] args){
 		Main m = new Main();
 		//m.testSolo();
-		m.testFonctions();
+		m.testDuo();
+		//m.testFonctions();
 		//m.testUI();
 	}
 	

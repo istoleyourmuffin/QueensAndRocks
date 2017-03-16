@@ -412,30 +412,136 @@ public class Board {
 		this.rocksPlayer1 = rocks;
 	}
 	
-	// Il manque la vérification des rochers
+	public boolean protectedCase(int xCase, int yCase, int xQueen, int yQueen) {
+		boolean rockFound = false;
+		int rockX = 0;
+		int rockY = 0;
+		
+		if(xQueen == xCase){
+			if(yQueen > yCase){ //verification en hauteur
+				rockY = yQueen-1;
+				while(!rockFound && rockY > yCase){ // on verifie si entre les 2 cases il n'y a pas de rocher
+					if(this.getPiece(xQueen, rockY) instanceof Rock)
+						rockFound = true;
+					rockY--;
+				}
+			}else{
+				rockY = yQueen+1;
+				while(!rockFound && rockY < yCase){
+					if(this.getPiece(xQueen, rockY) instanceof Rock)
+						rockFound = true;
+					rockY++;
+				}
+			}
+		}else if(yQueen == yCase){ //verification en largeur
+			if(xQueen > xCase){
+				rockX = xQueen-1;
+				while(!rockFound && rockX > xCase){
+					if(this.getPiece(xQueen, rockY) instanceof Rock)
+						rockFound = true;
+					rockX--;
+				}
+			}else{
+				rockX = xQueen+1;
+				while(!rockFound && rockX < xCase){ 
+					if(this.getPiece(xQueen, rockY) instanceof Rock)
+						rockFound = true;
+					rockX++;
+				}
+			}
+		}else if(Math.abs(xQueen - xCase) == Math.abs(yQueen - yCase)) { //verification en diagonale
+			if(xQueen > xCase){
+				rockX = xQueen-1;
+				if(yQueen > yCase){
+					rockY = yQueen-1;
+					while(!rockFound && rockX > xCase && rockY > yCase){
+						if(this.getPiece(rockX, rockY) instanceof Rock)
+							rockFound = true;
+						rockX--;
+						rockY--;
+					}
+				}else{
+					rockY = yQueen+1;
+					while(!rockFound && rockX > xCase && rockY < yCase){
+						if(this.getPiece(rockX, rockY) instanceof Rock)
+							rockFound = true;
+						rockX--;
+						rockY++;
+					}
+				}
+			}else{ 
+				rockX = xQueen+1;
+				if(yQueen > yCase){
+					rockY = yQueen-1;
+					while(!rockFound && rockX < xCase && rockY > yCase){
+						if(this.getPiece(rockX, rockY) instanceof Rock)
+							rockFound = true;
+						rockX++;
+						rockY--;
+					}
+				}else{
+					rockY = yQueen+1;
+					while(!rockFound && rockX < xCase && rockY < yCase){
+						System.out.println(rockX + " "+ rockY);
+						if(this.getPiece(rockX, rockY) instanceof Rock)
+							rockFound = true;
+						rockX++;
+						rockY++;
+					}
+				}
+			}
+		}
+		return rockFound;
+	}
+	
 	public boolean isAccessible2(int i, int j, Player currentPlayer) {
 		if(!(this.isEmpty(i,j)) || (i >= size) || (j >= size))
 			return false;
 		int x = 0;
 		int y = 0;
 		boolean queenFound = false;
+		
 		while(!queenFound && (y < this.size)){
 			x = 0;
 			while(!queenFound && (x < this.size)){
-				if(!(x == i && y == j)) {
-					if(this.getPiece(x,y) instanceof Queen 
-							&& !this.getPiece(x, y).getPlayer().equals(currentPlayer) 
-							&& ((x == i) || (y == j) || (Math.abs(x - i) == Math.abs(y - j))))
+				if(!(x == i && y == j) && (this.getPiece(x,y) instanceof Queen) && (!this.getPiece(x, y).getPlayer().equals(currentPlayer)))
+					if(!this.protectedCase(i,j,x,y)) //On verifie s'il y a un rocher entre la reine et la case testee
 						queenFound = true;
-				}
 				x++;
 			}
 			y++;
 		}
+			
 		return !queenFound;
 	}
 
+	public int numberOfAccessible2(Player player) {
+		int nbOfAccessible = 0;
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				if(this.isAccessible2(i,j,player))
+					nbOfAccessible++;
+			}
+		}
+		return nbOfAccessible;
+	}
 
+	public String toStringAccess2(Player player) {
+		String retour = this.toString();
+		retour += "\n---------Cases inacessibles---------\n";
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				if(!this.isAccessible2(i,j,player))
+					retour += "X";
+				else
+					retour += "-";
+				retour += "    ";
+			}
+			retour += " \n";
+		}
+		return retour;
+	}
+	
 	public boolean placeQueen2(int i, int j, Player player) {
 		// TODO Auto-generated method stub
 		return false;
