@@ -13,6 +13,8 @@ public class Board {
 	private Square[][] board;
 	private int rocksPlayer0;
 	private int rocksPlayer1;
+	public static int queenValue = 5;
+	public static int rockValue = 2;
 
 	public Board(){
 		this.game = new Game();
@@ -38,6 +40,8 @@ public class Board {
 				board[i][j] = game.getEmpty();
 			}
 		}
+		this.rocksPlayer0 = this.size;
+		this.rocksPlayer1 = this.size;
 	}
 
 	public Board(Board b){
@@ -413,12 +417,13 @@ public class Board {
 	}
 	
 	public boolean protectedCase(int xCase, int yCase, int xQueen, int yQueen) {
-		boolean rockFound = false;
+		boolean rockFound = true;
 		int rockX = 0;
 		int rockY = 0;
 		
 		if(xQueen == xCase){
-			if(yQueen > yCase){ //verification en hauteur
+			rockFound = false;
+			if(yQueen > yCase){ //verification en largeur
 				rockY = yQueen-1;
 				while(!rockFound && rockY > yCase){ // on verifie si entre les 2 cases il n'y a pas de rocher
 					if(this.getPiece(xQueen, rockY) instanceof Rock)
@@ -433,23 +438,25 @@ public class Board {
 					rockY++;
 				}
 			}
-		}else if(yQueen == yCase){ //verification en largeur
+		}else if(yQueen == yCase){ //verification en hauteur
+			rockFound = false;
 			if(xQueen > xCase){
 				rockX = xQueen-1;
 				while(!rockFound && rockX > xCase){
-					if(this.getPiece(xQueen, rockY) instanceof Rock)
+					if(this.getPiece(rockX, yCase) instanceof Rock)
 						rockFound = true;
 					rockX--;
 				}
 			}else{
 				rockX = xQueen+1;
 				while(!rockFound && rockX < xCase){ 
-					if(this.getPiece(xQueen, rockY) instanceof Rock)
+					if(this.getPiece(rockX, yCase) instanceof Rock)
 						rockFound = true;
 					rockX++;
 				}
 			}
 		}else if(Math.abs(xQueen - xCase) == Math.abs(yQueen - yCase)) { //verification en diagonale
+			rockFound = false;
 			if(xQueen > xCase){
 				rockX = xQueen-1;
 				if(yQueen > yCase){
@@ -482,7 +489,6 @@ public class Board {
 				}else{
 					rockY = yQueen+1;
 					while(!rockFound && rockX < xCase && rockY < yCase){
-						System.out.println(rockX + " "+ rockY);
 						if(this.getPiece(rockX, rockY) instanceof Rock)
 							rockFound = true;
 						rockX++;
@@ -542,13 +548,62 @@ public class Board {
 		return retour;
 	}
 	
+	public int numberOfQueens2(Player player) {
+		int nbOfQueens = 0;
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				if(this.getPiece(i, j) instanceof Queen && this.getPiece(i, j).getPlayer().equals(player))
+					nbOfQueens++;
+			}
+		}
+		return nbOfQueens;
+	}
+	
+	public int numberOfRocks2(Player player) {
+		int nbOfRocks = 0;
+		for(int i = 0 ; i < this.size ; i++){
+			for(int j = 0 ; j < this.size ; j++){
+				if(this.getPiece(i, j) instanceof Rock && this.getPiece(i, j).getPlayer().equals(player))
+					nbOfRocks++;
+			}
+		}
+		return nbOfRocks;
+	}
+	
 	public boolean placeQueen2(int i, int j, Player player) {
-		// TODO Auto-generated method stub
+		if(this.isAccessible2(i, j, player)){
+			int playerNumber = player.getNumber();
+			if(playerNumber == 0){
+				this.setPiece(i, j, this.getGame().getQueen0()) ;
+				
+			}else{
+				this.setPiece(i, j, this.getGame().getQueen1()) ;
+				
+			}
+			return true;
+		}
 		return false;
 	}
-
+	
 	public boolean placeRock2(int i, int j, Player player) {
-		// TODO Auto-generated method stub
+		int playerNumber = player.getNumber();
+		if(playerNumber == 0){
+			if(this.getRocksPlayer0() <= 0)
+				return false;
+			if(this.getPiece(i, j) instanceof Empty){
+				this.setPiece(i, j, this.getGame().getRock0());
+				this.setRocksPlayer0(this.getRocksPlayer0()-1);
+				return true;
+			}
+		}else{
+			if(this.getRocksPlayer1() <= 0)
+				return false;
+			if(this.getPiece(i, j) instanceof Empty){
+				this.setPiece(i, j, this.getGame().getRock1());
+				this.setRocksPlayer1(this.getRocksPlayer1()-1);
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -566,8 +621,10 @@ public class Board {
 	}
 	
 	public int getScore(Player player){
-		// TODO Auto-generated method stub
-		return 0;
+		int score = 0;
+		score += this.numberOfQueens2(player)*queenValue;
+		score += this.numberOfRocks2(player)*rockValue;
+		return score;
 	}
 
 
