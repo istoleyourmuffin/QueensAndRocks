@@ -229,18 +229,53 @@ public class Main {
 			System.out.println("Le joueur 0 gagne la partie");
 		else
 			System.out.println("Le joueur 1 gagne la partie");
-
 	}
 	
+	
+	
+	
+	public void computerAgainstHimself(){
+		long t = System.currentTimeMillis();
+		Board b = new Board(6);
+		int tour = 0;
+		Player player0 = b.getGame().getPlayer0();
+		Player player1 = b.getGame().getPlayer1();
+		Eval0 e = new Eval0();
+		
+		while(!b.isFinal()){
+			System.out.println("Score : Joueur0 - "+b.getScore(player0)+" | Joueur1 - "+b.getScore(player1));
+			System.out.println("----------------------------------------");
+			System.out.println("Nombre de rochers : Joueur0 - "+b.getNumberOfRocksLeft(player0)+" | Joueur1 - "+b.getNumberOfRocksLeft(player1));
+			System.out.println("----------------------------------------");
+			if(tour%2 == 0){
+				System.out.println("Tour du Joueur0");
+				System.out.println(b.toStringAccess2(player0));
+				b = b.minimax(b, player0, 2, e);
+			}else{
+				System.out.println("Tour du Joueur1");
+				System.out.println(b.toStringAccess2(player1));
+				b = b.minimax(b, player1, 2, e);
+			}
+			tour++;
+			
+		}
+		if(b.getScore(player0) > b.getScore(player1))
+			System.out.println("Le joueur 0 gagne la partie");
+		else
+			System.out.println("Le joueur 1 gagne la partie");
+		long t2 = System.currentTimeMillis();
+		System.out.println("Temps d'exécution : "+(t2-t));
+	}
 
 
 	public static void main(String[] args){
 		Main m = new Main();
 		//m.testSolo();
-		m.testDuoRockFirst();
+		//m.testDuoRockFirst();
 		//m.testFonctionsSolo();
 		//m.testFonctionsDuo();
 		//m.testUI();
+		m.computerAgainstHimself();
 	}
 
 }

@@ -3,8 +3,7 @@ package gameElement;
 public class Eval0 implements Eval{
 
 	public float getEval(Player player, Board b) {
-		// TODO Auto-generated method stub
-		return 0;
+		return b.getScore(player) - b.getScore(b.getGame().otherPlayer(player));
 	}
 
 }

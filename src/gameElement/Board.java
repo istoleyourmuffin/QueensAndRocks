@@ -631,13 +631,74 @@ public class Board {
 
 	//----------------------TP4&5--------------------------
 	public boolean isFinal() {
-		// TODO Auto-generated method stub
-		return false;
+		Player player0 = this.getGame().getPlayer0();
+		Player player1 = this.getGame().getPlayer1();
+		return (((this.getNumberOfRocksLeft(player0) <= 0)
+				&& (this.numberOfAccessible2(player0) <= 0))
+				||((this.getNumberOfRocksLeft(player1) <= 0)
+				&& (this.numberOfAccessible2(player1) <= 0)));
 	}
 
+	public ArrayList<Board> getSuccessors2(Player player) {
+		ArrayList<Board> succList = new ArrayList<Board>();
+		Board succ;
+		for (int i = 0; i < this.getSize(); i++){
+			for (int j = 0; j < this.getSize(); j++){
+				if(isAccessible2(i,j, player)){
+					succ = new Board(this);
+					succ.placeQueen2(i,j,player);
+					succList.add(succ);
+				}
+				if(this.getPiece(i, j) instanceof Empty
+						&& this.getNumberOfRocksLeft(player) > 0){
+					succ = new Board(this);
+					succ.placeRock2(i,j,player);
+					succList.add(succ);
+				}
+			}
+		}
+		return succList;
+	}
+	
+	
 	public Board minimax(Board b, Player currentPlayer, int minimaxDepth, Eval evaluation) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Board> succ = this.getSuccessors2(currentPlayer);
+		float score = 0;
+		float scoreMax = Float.NEGATIVE_INFINITY;
+		Board esortie = new Board(b.getSize());
+		
+		for(Board s:succ){
+			score = this.evaluation(s, currentPlayer, minimaxDepth, evaluation, currentPlayer);
+			if(score >= scoreMax){
+				esortie = s;
+				scoreMax = score;
+			}
+		}
+		return esortie;
+	}
+	
+	public float evaluation(Board b, Player player, int c, Eval e, Player playing){
+		if(b.isFinal()){
+			if(b.getScore(playing) > b.getScore(b.getGame().otherPlayer(playing)))
+				return Float.POSITIVE_INFINITY;
+			else if(b.getScore(playing) < b.getScore(b.getGame().otherPlayer(playing)))
+					return Float.NEGATIVE_INFINITY;
+			return 0;
+		}
+		if(c == 0)
+			return e.getEval(player, b);
+		ArrayList<Board> succ = b.getSuccessors2(playing);
+		if(playing.equals(player)){
+			float scoreMax = Float.NEGATIVE_INFINITY;
+			for(Board s:succ)
+				scoreMax = Math.max(scoreMax, this.evaluation(s, player, c-1, e, this.getGame().otherPlayer(playing)));
+			return scoreMax;
+		}else{
+			float scoreMin = Float.POSITIVE_INFINITY;
+			for(Board s:succ)
+				scoreMin = Math.min(scoreMin, this.evaluation(s, player, c-1, e, this.getGame().otherPlayer(playing)));
+			return scoreMin;
+		}
 	}
 
 
