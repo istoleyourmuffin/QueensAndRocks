@@ -236,7 +236,7 @@ public class Main {
 	
 	public void computerAgainstHimself(){
 		long t = System.currentTimeMillis();
-		Board b = new Board(6);
+		Board b = new Board(8);
 		int tour = 0;
 		Player player0 = b.getGame().getPlayer0();
 		Player player1 = b.getGame().getPlayer1();
