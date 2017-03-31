@@ -1,9 +1,4 @@
-import gameElement.Board;
-import gameElement.Eval;
-import gameElement.Eval0;
-import gameElement.Eval1;
-import gameElement.Player;
-
+package gameElement;
 public class EvalLambda implements Eval {
 
 	float lambda;

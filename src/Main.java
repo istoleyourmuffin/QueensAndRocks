@@ -23,10 +23,8 @@ public class Main {
 				lambdaPrime = lambda + (float)0.01;
 			}
 			el.setLambda(lambda);
-			System.out.println("--------------\nlambda = "+lambda+" | lambdaPrime ="+lambdaPrime+"--------------");
 		}
 		return lambda;
-		
 	}
 	
 	public void testFonctionsSolo(){
@@ -293,8 +291,8 @@ public class Main {
 		//m.testFonctionsSolo();
 		//m.testFonctionsDuo();
 		//m.testUI();
-		//m.testOptimisation();
-		m.computerAgainstHimself(new Eval2());
+		m.testOptimisation();
+		//m.computerAgainstHimself(new Eval2());
 	}
 
 }
