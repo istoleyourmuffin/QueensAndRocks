@@ -634,9 +634,10 @@ public class Board {
 		Player player0 = this.getGame().getPlayer0();
 		Player player1 = this.getGame().getPlayer1();
 		return (((this.getNumberOfRocksLeft(player0) <= 0)
-				&& (this.numberOfAccessible2(player0) <= 0))
+					&& (this.numberOfAccessible2(player0) <= 0))
 				||((this.getNumberOfRocksLeft(player1) <= 0)
-				&& (this.numberOfAccessible2(player1) <= 0)));
+					&& (this.numberOfAccessible2(player1) <= 0))
+				|| (this.numberOfPieces >= this.getSize()*this.getSize()));
 	}
 
 	public ArrayList<Board> getSuccessors2(Player player) {
@@ -732,10 +733,5 @@ public class Board {
 	public void setNumberOfPieces(int numberOfPieces) {
 		this.numberOfPieces = numberOfPieces;
 	}
-
-
-
-
-
 
 }

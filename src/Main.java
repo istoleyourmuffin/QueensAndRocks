@@ -7,14 +7,32 @@ import graphics.GameUI;
 
 public class Main {
 
+	public float optimisation(){
+		EvalLambda el = new EvalLambda();
+		float lambda = el.getLambda();
+		float lambdaPrime = el.getLambda()+(float)0.01;
+		float t = 0, t2 = 0;
+		while(lambdaPrime-lambda <= 0.1){
+			t = computerAgainstHimself(el);
+			el.setLambda(lambdaPrime);
+			t2 = computerAgainstHimself(el);
+			if(t < t2){
+				lambdaPrime += 0.01;
+			}else{
+				lambda = lambdaPrime;
+				lambdaPrime = lambda + (float)0.01;
+			}
+			el.setLambda(lambda);
+			System.out.println("--------------\nlambda = "+lambda+" | lambdaPrime ="+lambdaPrime+"--------------");
+		}
+		return lambda;
+		
+	}
+	
 	public void testFonctionsSolo(){
 		Board b = new Board(8);
 		String s = b.toString();
-		//System.out.println(s);
-		//System.out.println("------------------------------------");
 		Game game = b.getGame();
-		//String s2 = b.toStringAccess();
-		//System.out.println(s2);
 		int i1 = b.numberOfAccessible();
 		System.out.println("Nombre de cases accessibles : " + i1);
 		int i2 = b.numberOfQueens();
@@ -24,10 +42,6 @@ public class Main {
 		long t2 = System.currentTimeMillis();
 		System.out.println("Temps d'exï¿½cution : "+(t2 - t));
 		int[] array = b.boardToArray();
-		/*System.out.print("[ ");
-		for (int i = 0 ; i < array.length ; i++)
-			System.out.print(array[i]+" ");
-		System.out.println("]");*/
 		System.out.println("\n--------------------Test depthFirstSearchArray--------------------\n");
 		long t3 = System.currentTimeMillis();
 		System.out.println(Board.solutionSteps(array));
@@ -56,8 +70,9 @@ public class Main {
 
 
 	public void testUI(){
-		Board b = new Board(4);
+		Board b = new Board(8);
 		GameUI g = new GameUI(b,2);
+		g.setEvaluation(new Eval1());
 		g.launch();
 	}
 
@@ -151,7 +166,6 @@ public class Main {
 			System.out.println("Le joueur 0 gagne la partie");
 		else
 			System.out.println("Le joueur 1 gagne la partie");
-
 	}
 	
 	public void testDuoRockFirst() {
@@ -231,17 +245,12 @@ public class Main {
 			System.out.println("Le joueur 1 gagne la partie");
 	}
 	
-	
-	
-	
-	public void computerAgainstHimself(){
+	public float computerAgainstHimself(Eval e){
 		long t = System.currentTimeMillis();
-		Board b = new Board(8);
+		Board b = new Board(4);
 		int tour = 0;
 		Player player0 = b.getGame().getPlayer0();
 		Player player1 = b.getGame().getPlayer1();
-		Eval0 e = new Eval0();
-		
 		while(!b.isFinal()){
 			System.out.println("Score : Joueur0 - "+b.getScore(player0)+" | Joueur1 - "+b.getScore(player1));
 			System.out.println("----------------------------------------");
@@ -261,12 +270,21 @@ public class Main {
 		}
 		if(b.getScore(player0) > b.getScore(player1))
 			System.out.println("Le joueur 0 gagne la partie");
-		else
+		else if(b.getScore(player1) > b.getScore(player0))
 			System.out.println("Le joueur 1 gagne la partie");
+		else
+			System.out.println("Egalité !");
+		System.out.println("Score final : Joueur0 - "+b.getScore(player0)+" | Joueur1 - "+b.getScore(player1));
 		long t2 = System.currentTimeMillis();
 		System.out.println("Temps d'exÃ©cution : "+(t2-t));
+		return (float)t2-t;
 	}
 
+	
+	public void testOptimisation(){
+		float lambdaFinal = optimisation();
+		System.out.println("Lambda final : "+ lambdaFinal);
+	}
 
 	public static void main(String[] args){
 		Main m = new Main();
@@ -275,7 +293,8 @@ public class Main {
 		//m.testFonctionsSolo();
 		//m.testFonctionsDuo();
 		//m.testUI();
-		m.computerAgainstHimself();
+		//m.testOptimisation();
+		m.computerAgainstHimself(new Eval2());
 	}
 
 }
