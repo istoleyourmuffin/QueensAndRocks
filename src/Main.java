@@ -291,8 +291,8 @@ public class Main {
 		//m.testFonctionsSolo();
 		//m.testFonctionsDuo();
 		//m.testUI();
-		m.testOptimisation();
-		//m.computerAgainstHimself(new Eval2());
+		//m.testOptimisation();
+		m.computerAgainstHimself(new Eval2());
 	}
 
 }
