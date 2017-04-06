@@ -13,9 +13,9 @@ public class Main {
 		float lambdaPrime = el.getLambda()+(float)0.01;
 		float t = 0, t2 = 0;
 		while(lambdaPrime-lambda <= 0.1){
-			t = computerAgainstHimself(el);
+			//t = computerAgainstHimself(el);
 			el.setLambda(lambdaPrime);
-			t2 = computerAgainstHimself(el);
+			//t2 = computerAgainstHimself(el);
 			if(t < t2){
 				lambdaPrime += 0.01;
 			}else{
@@ -36,13 +36,14 @@ public class Main {
 		int i2 = b.numberOfQueens();
 		System.out.println("Nombre de reines : " + i2);
 		long t = System.currentTimeMillis();
-		System.out.println(b.solutionSteps2(b));
+		System.out.println(b.solutionSteps(b));
 		long t2 = System.currentTimeMillis();
 		System.out.println("Temps d'ex�cution : "+(t2 - t));
 		int[] array = b.boardToArray();
 		System.out.println("\n--------------------Test depthFirstSearchArray--------------------\n");
 		long t3 = System.currentTimeMillis();
-		System.out.println(Board.solutionSteps(array));
+		System.out.println(b.solutionSteps2(b));
+		//System.out.println(Board.solutionSteps(array));
 		long t4 = System.currentTimeMillis();
 		System.out.println("Temps d'ex�cution : "+(t4 - t3));
 	}
@@ -243,7 +244,7 @@ public class Main {
 			System.out.println("Le joueur 1 gagne la partie");
 	}
 	
-	public float computerAgainstHimself(Eval e){
+	public float computerAgainstHimself(Eval e, Eval e2){
 		long t = System.currentTimeMillis();
 		Board b = new Board(4);
 		int tour = 0;
@@ -261,7 +262,7 @@ public class Main {
 			}else{
 				System.out.println("Tour du Joueur1");
 				System.out.println(b.toStringAccess2(player1));
-				b = b.minimax(b, player1, 2, e);
+				b = b.minimax(b, player1, 2, e2);
 			}
 			tour++;
 			
@@ -292,7 +293,7 @@ public class Main {
 		//m.testFonctionsDuo();
 		//m.testUI();
 		//m.testOptimisation();
-		m.computerAgainstHimself(new Eval2());
+		m.computerAgainstHimself(new Eval2(), new EvalLambda());
 	}
 
 }
